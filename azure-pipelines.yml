@@ -62,7 +62,7 @@ steps:
 # Distribute app builds to testers and users via Visual Studio App Center
 - task: AppCenterDistribute@1
   inputs:
-    serverEndpoint: 'AppCenter'
+    serverEndpoint: 'AppCenterConnection'
     # appSlug: '{APPCENTER_USERNAME}/{APPCENTER_APPID}'
     appSlug: 'preetam.jadakar/nCash'
     appFile: '$(build.artifactStagingDirectory)/**/*.ipa'
