@@ -29,7 +29,7 @@ steps:
 
 - task: Xcode@5
   inputs:
-    actions: 'build test archive'
+    actions: 'build archive'
     scheme: 'UniversalLinks'
     sdk: 'iphoneos'
     configuration: 'Release'
