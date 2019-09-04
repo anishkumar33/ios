@@ -88,7 +88,7 @@ steps:
     #symbolsDsymFiles: # Optional
     #symbolsMappingTxtFile: # Optional
     #symbolsIncludeParentDirectory: # Optional
-    releaseNotesOption: 'File' #'input'
+    releaseNotesOption: 'file' #'input'
     # releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
     releaseNotesFile: '$(system.defaultworkingdirectory)/ReleaseNotes'
     #isMandatory: false # Optional
@@ -111,7 +111,7 @@ steps:
     #symbolsDsymFiles: # Optional
     #symbolsMappingTxtFile: # Optional
     #symbolsIncludeParentDirectory: # Optional
-    releaseNotesOption: 'File' #'input'
+    releaseNotesOption: 'file' #'input'
     # releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
     releaseNotesFile: '$(system.defaultworkingdirectory)/ReleaseNotes'
     #isMandatory: false # Optional
