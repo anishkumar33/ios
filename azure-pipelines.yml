@@ -29,7 +29,7 @@ steps:
 
 - task: Xcode@5
   inputs:
-    actions: 'build archive'
+    actions: 'build'
     scheme: 'UniversalLinks'
     sdk: 'iphoneos'
     configuration: 'Release'
@@ -51,11 +51,38 @@ steps:
     # teamId: 'U98KTBTAC9'
     useXcpretty: true # Makes it easier to diagnose build failures
 
+- task: Xcode@5
+  inputs:
+    actions: 'archive'
+    scheme: 'UniversalLinks'
+    sdk: 'iphoneos'
+    configuration: 'Release'
+    xcWorkspacePath: '**/UniversalLinks.xcworkspace'
+    xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+    packageApp: true
+    archivePath: '$(system.defaultworkingdirectory)/build/UniversalLinks.xcarchive'
+    exportPath: '$(system.defaultworkingdirectory)/build'
+    # exportPath: 'output/$(SDK)/Release' # Optional
+    exportOptions: 'plist'
+    # exportMethod: 'development' # Required when exportOptions == Specify
+    # exportTeamId: 'U98KTBTAC9'
+    exportOptionsPlist: '$(system.defaultworkingdirectory)/ExportOptions.plist'
+    # exportPath: '$(system.defaultworkingdirectory)'
+    # signingOption: 'manual' # Options: nosign, default, manual, auto
+    signingOption: 'manual'
+    provisioningProfileUuid: 'com.nihilentmobile.ncash'
+    provisioningProfileName: 'nCashDist'
+    # teamId: 'U98KTBTAC9'
+    useXcpretty: true # Makes it easier to diagnose build failures
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '/**/*.ipa'
     TargetFolder: '$(build.artifactStagingDirectory)'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
 - task: PublishBuildArtifacts@1
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
