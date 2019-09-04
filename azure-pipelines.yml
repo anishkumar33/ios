@@ -88,9 +88,9 @@ steps:
     #symbolsDsymFiles: # Optional
     #symbolsMappingTxtFile: # Optional
     #symbolsIncludeParentDirectory: # Optional
-    releaseNotesOption: 'input'
-    releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
-    #releaseNotesFile: # Required when releaseNotesOption == File
+    releaseNotesOption: 'File' #'input'
+    # releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
+    releaseNotesFile: '$(system.defaultworkingdirectory)/ReleaseNotes'
     #isMandatory: false # Optional
     distributionGroupId: '057661c4-02ef-4955-826a-3397cf7445e6'
     destinationType: 'groups'
@@ -111,9 +111,9 @@ steps:
     #symbolsDsymFiles: # Optional
     #symbolsMappingTxtFile: # Optional
     #symbolsIncludeParentDirectory: # Optional
-    releaseNotesOption: 'input'
-    releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
-    #releaseNotesFile: # Required when releaseNotesOption == File
+    releaseNotesOption: 'File' #'input'
+    # releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
+    releaseNotesFile: '$(system.defaultworkingdirectory)/ReleaseNotes'
     #isMandatory: false # Optional
     distributionGroupId: 'e018552d-68ff-466b-bb08-4fb12050da8b'
     destinationType: 'groups'
