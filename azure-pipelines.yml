@@ -20,14 +20,14 @@ steps:
   inputs:
     certSecureFile: 'DistCertificate.p12'
     certPwd: "admin123"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
     provisioningProfileLocation: 'secureFiles'
     provProfileSecureFile: 'nCashDist.mobileprovision'
     removeProfile: true # Optional
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
 
 - task: Xcode@5
   inputs:
@@ -61,17 +61,17 @@ steps:
     provisioningProfileName: 'nCashDist'
     # teamId: 'U98KTBTAC9'
     useXcpretty: true # Makes it easier to diagnose build failures
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
 
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '/**/*.ipa'
     TargetFolder: '$(build.artifactStagingDirectory)'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
 
 - task: PublishBuildArtifacts@1
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
 
 
 # App Center distribute - 'develop' branch
