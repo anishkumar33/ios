@@ -3,9 +3,9 @@
 # Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
-trigger:
-- master
-- develop
+# trigger:
+# - master
+# - develop
 
 pool:
   vmImage: 'macOS-10.14'
@@ -20,16 +20,27 @@ steps:
   inputs:
     certSecureFile: 'DistCertificate.p12'
     certPwd: "admin123"
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
     provisioningProfileLocation: 'secureFiles'
     provProfileSecureFile: 'nCashDist.mobileprovision'
     removeProfile: true # Optional
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
 - task: Xcode@5
   inputs:
-    actions: 'build archive'
+    actions: 'build'
+    scheme: 'UniversalLinks'
+    sdk: 'iphoneos'
+    configuration: 'Release'
+    xcWorkspacePath: '**/UniversalLinks.xcworkspace'
+    xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+
+- task: Xcode@5
+  inputs:
+    actions: 'archive'
     scheme: 'UniversalLinks'
     sdk: 'iphoneos'
     configuration: 'Release'
@@ -50,15 +61,20 @@ steps:
     provisioningProfileName: 'nCashDist'
     # teamId: 'U98KTBTAC9'
     useXcpretty: true # Makes it easier to diagnose build failures
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
     Contents: '/**/*.ipa'
     TargetFolder: '$(build.artifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
-# App Center distribute
+- task: PublishBuildArtifacts@1
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
+
+# App Center distribute - 'develop' branch
 # Distribute app builds to testers and users via Visual Studio App Center
 - task: AppCenterDistribute@1
   inputs:
@@ -79,3 +95,28 @@ steps:
     distributionGroupId: '057661c4-02ef-4955-826a-3397cf7445e6'
     destinationType: 'groups'
     useXcpretty: true # Makes it easier to diagnose build failures
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
+# App Center distribute - 'master' branch
+# Distribute app builds to testers and users via Visual Studio App Center
+- task: AppCenterDistribute@1
+  inputs:
+    serverEndpoint: 'AppCenterConnection'
+    # appSlug: '{APPCENTER_USERNAME}/{APPCENTER_APPID}'
+    appSlug: 'preetam.jadakar/nCash'
+    appFile: '$(build.artifactStagingDirectory)/**/*.ipa'
+    symbolsOption: 'Apple' # Optional. Options: apple
+    #symbolsPath: # Optional
+    #symbolsPdbFiles: '**/*.pdb' # Optional
+    #symbolsDsymFiles: # Optional
+    #symbolsMappingTxtFile: # Optional
+    #symbolsIncludeParentDirectory: # Optional
+    releaseNotesOption: 'input'
+    releaseNotesInput: 'Implemented build auto-increment using shell scrpts.'
+    #releaseNotesFile: # Required when releaseNotesOption == File
+    #isMandatory: false # Optional
+    distributionGroupId: 'e018552d-68ff-466b-bb08-4fb12050da8b'
+    destinationType: 'groups'
+    useXcpretty: true # Makes it easier to diagnose build failures
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
