@@ -3,9 +3,9 @@
 # Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
-trigger:
-- master
-- develop
+# trigger:
+# - master
+# - develop
 
 pool:
   vmImage: 'macOS-10.14'
@@ -57,6 +57,8 @@ steps:
     Contents: '/**/*.ipa'
     TargetFolder: '$(build.artifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')), and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
 
 # App Center distribute
 # Distribute app builds to testers and users via Visual Studio App Center
@@ -79,3 +81,5 @@ steps:
     distributionGroupId: '057661c4-02ef-4955-826a-3397cf7445e6'
     destinationType: 'groups'
     useXcpretty: true # Makes it easier to diagnose build failures
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')), and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
