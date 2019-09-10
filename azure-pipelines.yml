@@ -107,7 +107,6 @@ steps:
     appFile: '$(build.artifactStagingDirectory)/**/*.ipa'
     symbolsOption: 'Apple' # Optional. Options: apple
     #symbolsPath: # Optional
-    #symbolsPdbFiles: '**/*.pdb' # Optional
     #symbolsDsymFiles: # Optional
     #symbolsMappingTxtFile: # Optional
     #symbolsIncludeParentDirectory: # Optional
